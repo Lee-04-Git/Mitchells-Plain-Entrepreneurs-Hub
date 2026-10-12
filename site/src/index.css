@@ -1,0 +1,284 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   MPEH — "Market Day Editorial". See design-system/MASTER.md.
+------------------------------------------------------------------- */
+@theme {
+  /* Ivory base — clean, faintly warm, lets both gold and evergreen glow */
+  --color-paper: #f8f4ec;
+  /* The one alternate band colour site-wide: sage (evergreen mixed into ivory),
+     the cool partner to the warm base. Also ticket stubs and photo mats. */
+  --color-paper-2: #e8efe6;
+  --color-card: #fffdf8;
+  /* Evergreen neutrals: every dark on the site shares the teal's hue, so
+     text, borders, shadows, buttons and dark bands read as one family */
+  --color-ink: #15201e;
+  --color-ink-2: #22302d;
+  --color-ink-soft: #4b5753;
+  --color-rule: #d9d1c0;
+  /* Brand gold */
+  --color-marigold: #e9a520;
+  --color-marigold-soft: #f8e2a6;
+  --color-gold-deep: #7a5605;
+  /* Terracotta — teal's true complement; hand marks, stamps, drop caps only */
+  --color-clay: #c2512e;
+  --color-clay-soft: #f4dacd;
+  /* Evergreen family */
+  --color-teal: #1d5c55;
+  --color-teal-deep: #12423c;
+  --color-teal-ink: #0c2e2a;
+  /* Sage tints: teal mixed into ivory (not white) so cool bands sit with the warm base */
+  --color-teal-soft: #d5e4d8;
+  --color-teal-mist: #e8efe6;
+  --color-on-ink-muted: #b3bcb6;
+  --color-on-teal-muted: #b4cbc4;
+
+  --font-poster: 'Big Shoulders', 'Arial Narrow', sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
+
+  --shadow-hard: 4px 4px 0 var(--color-ink);
+  --shadow-hard-sm: 2px 2px 0 var(--color-ink);
+  --shadow-hard-lg: 8px 8px 0 var(--color-ink);
+  --shadow-photo: 0 18px 40px -18px rgb(21 32 30 / 0.42);
+}
+
+/* Self-hosted, latin-only, variable where possible (385 KB total). The
+   poster face blocks briefly (it's preloaded) so headlines never reflow
+   from a fallback; text faces swap. */
+@font-face {
+  font-family: 'Big Shoulders';
+  src: url('/fonts/big-shoulders-normal-700-900.woff2') format('woff2');
+  font-weight: 700 900;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/fonts/public-sans-normal-400-700.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader-normal-400-600.woff2') format('woff2');
+  font-weight: 400 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader-italic-400-500.woff2') format('woff2');
+  font-weight: 400 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono-normal-500.woff2') format('woff2');
+  font-weight: 400 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono-normal-600.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-paper font-sans text-ink;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+    font-weight: 600;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-marigold-soft);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--color-teal);
+    outline-offset: 3px;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+  }
+  button,
+  a,
+  [role='button'] {
+    cursor: pointer;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 84rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 2.75rem);
+  }
+
+  /* Poster display type */
+  .poster {
+    font-family: var(--font-poster);
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: -0.012em;
+    line-height: 0.86;
+    font-variation-settings: 'opsz' 72;
+  }
+  .poster-xl {
+    /* Capped at 7.5rem: the hero column stops widening at ~716px, and above
+       this size "ENTREPRENEURS" would outgrow it and be clipped by the line mask. */
+    font-size: clamp(3.1rem, 8.3vw, 7.5rem);
+  }
+  .poster-lg {
+    font-size: clamp(2.7rem, 6.6vw, 6.5rem);
+  }
+  .poster-md {
+    font-size: clamp(2.4rem, 5.2vw, 4.75rem);
+  }
+  .poster-sm {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 0.92;
+  }
+
+  .serif {
+    font-family: var(--font-serif);
+    font-optical-sizing: auto;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+    line-height: 1.45;
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  /* Print materials */
+  .sheet {
+    background: var(--color-card);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 10px;
+  }
+  .press {
+    box-shadow: var(--shadow-hard);
+    transition:
+      transform 0.18s var(--ease-out-expo),
+      box-shadow 0.18s var(--ease-out-expo);
+  }
+  .press:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--color-ink);
+  }
+  .press:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
+
+  .rule {
+    height: 1.5px;
+    background: var(--color-ink);
+  }
+
+  .dropcap::first-letter {
+    float: left;
+    font-family: var(--font-poster);
+    font-weight: 900;
+    font-size: 5.6em;
+    line-height: 0.78;
+    padding: 0.06em 0.12em 0 0;
+    color: var(--color-clay);
+  }
+
+  /* Till-slip torn edges: zig-zag teeth top and bottom via layered masks. */
+  .receipt {
+    --t: 9px;
+    mask:
+      conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / 18px var(--t) repeat-x,
+      linear-gradient(#000 0 0) center / 100% calc(100% - 2 * var(--t) + 1px) no-repeat,
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 18px var(--t) repeat-x;
+  }
+
+  .paper-noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .08 0 0 0 0 .06 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .field {
+    @apply w-full rounded-md border-[1.5px] border-ink bg-card px-4 py-3 text-[1rem] text-ink transition-shadow duration-200 outline-none placeholder:text-ink-soft/60;
+  }
+  .field:focus {
+    box-shadow: var(--shadow-hard);
+  }
+  .field[aria-invalid='true'] {
+    border-color: var(--color-clay);
+  }
+
+  .link-ink {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1.5px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-out-expo);
+  }
+  .link-ink:hover {
+    background-size: 100% 1.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

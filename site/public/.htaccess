@@ -1,0 +1,53 @@
+# Mitchells Plain Entrepreneurs Hub — Apache / cPanel config
+# Upload the CONTENTS of dist/ (including this hidden file) into public_html.
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Always use HTTPS (also works behind a proxy/CDN that terminates SSL).
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Optional: send www.mpeh.co.za to mpeh.co.za. Uncomment once SSL covers both names.
+  # RewriteCond %{HTTP_HOST} ^www\.mpeh\.co\.za$ [NC]
+  # RewriteRule ^ https://mpeh.co.za%{REQUEST_URI} [L,R=301]
+
+  # Single-page app: any path that isn't a real file or folder is served by
+  # index.html, so /about, /events etc. load directly and survive a refresh.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Correct types for modern assets (some older hosts don't know them).
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+  AddType application/javascript .js .mjs
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# Compress text assets.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# Caching: hashed build files never change, so cache them for a year; the
+# HTML must always be re-checked so new deployments show up immediately.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(webp|png|jpg|jpeg|pdf)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
